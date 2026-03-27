@@ -1,0 +1,19 @@
+otodom-mock/
+├── .gitignore               # Ignoruje niepotrzebne pliki (np. folder venv)
+├── README.md                # Instrukcja obsługi repozytorium
+├── requirements.txt         # Lista zależności Pythona (bs4, selenium etc.)
+│
+├── data/                    # Folder na surowe dane JSON
+│   ├── listing.json
+│   └── offer_template.json
+│
+├── scripts/                 # Folder na wszystkie skrypty Pythona
+│   ├── download_data.py     # (Opcjonalny) Skrypt do pobierania świeżych JSON-ów
+│   └── generate.py          # Główny skrypt generujący strony
+│
+└── docs/                    # Folder hostowany przez GitHub Pages
+    ├── listing.html         # Wygenerowana strona główna
+    ├── listing-page-2.html
+    ├── oferta-1.html
+    ├── oferta-2.html
+    └── ...
