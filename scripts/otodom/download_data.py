@@ -6,7 +6,6 @@ import time
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 DATA_DIR = PROJECT_ROOT / 'data' / 'otodom'
-DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def download_and_save(driver, url, filename):
