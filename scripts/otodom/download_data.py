@@ -6,31 +6,54 @@ import time
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 DATA_DIR = PROJECT_ROOT / 'data' / 'otodom'
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def download_and_save(driver, url, filename):
+    driver.get(url)
+    time.sleep(3)
+
+    scripts = driver.find_elements(By.XPATH, '//script[@type="application/ld+json"]')
+
+    if not scripts:
+        return False
+
+    json_content = scripts[0].get_attribute('innerHTML')
+    data = json.loads(json_content)
+
+    html = f'''<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <script type="application/ld+json">
+{json.dumps(data, indent=2, ensure_ascii=False)}
+    </script>
+</head>
+<body></body>
+</html>
+'''
+
+    with open(DATA_DIR / filename, 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    return True
+
 
 driver = webdriver.Chrome()
 
 try:
-    listing_url = "https://www.otodom.pl/pl/wyniki/sprzedaz/mieszkanie%2Crynek-wtorny/cala-polska?limit=72"
-    driver.get(listing_url)
-    time.sleep(3)
+    download_and_save(
+        driver,
+        "https://www.otodom.pl/pl/wyniki/sprzedaz/mieszkanie%2Crynek-wtorny/cala-polska?limit=72",
+        "listing.html")
 
-    scripts = driver.find_elements(By.XPATH, '//script[@type="application/ld+json"]')
-    listing_json = scripts[0].get_attribute('innerHTML')
-    listing_data = json.loads(listing_json)
+    download_and_save(
+        driver,
+        "https://www.otodom.pl/pl/oferta/2-pokojowe-z-balkonem-wyposazone-przytulne-ID4AIgX",
+        "offer.html")
 
-    with open(DATA_DIR / 'listing.json', 'w', encoding='utf-8') as f:
-        json.dump(listing_data, f, indent=2, ensure_ascii=False)
-
-    offer_url = "https://www.otodom.pl/pl/oferta/2-pokojowe-z-balkonem-wyposazone-przytulne-ID4AIgX"
-    driver.get(offer_url)
-    time.sleep(3)
-
-    scripts = driver.find_elements(By.XPATH, '//script[@type="application/ld+json"]')
-    offer_json = scripts[0].get_attribute('innerHTML')
-    offer_data = json.loads(offer_json)
-
-    with open(DATA_DIR / 'offer.json', 'w', encoding='utf-8') as f:
-        json.dump(offer_data, f, indent=2, ensure_ascii=False)
+except Exception as e:
+    print(f"Error: {e}")
 
 finally:
     driver.quit()
