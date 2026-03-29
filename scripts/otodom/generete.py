@@ -62,7 +62,7 @@ except FileNotFoundError:
 all_offers = listing_source['@graph'][1]['offers']['offers']
 
 for i, offer in enumerate(all_offers, 1):
-    offer['url'] = f"{BASE_URL}/oferta-{i}.html"
+    offer['url'] = f"{BASE_URL}/offer-{i}.html"
 
 total_pages = (len(all_offers) + OFFERS_PER_PAGE - 1) // OFFERS_PER_PAGE
 
@@ -105,10 +105,10 @@ for page_num in range(total_pages + 1, total_pages + REDIRECT_PAGES + 1):
 for i, offer in enumerate(all_offers, 1):
     offer_data = json.loads(json.dumps(listing_source))
     offer_data['@graph'][1]['offers']['offers'] = [offer]
-    offer_data['@graph'][0]['url'] = f"{BASE_URL}/oferta-{i}.html"
+    offer_data['@graph'][0]['url'] = f"{BASE_URL}/offer-{i}.html"
 
     offer_name = offer.get('name', f'Oferta {i}')
-    filename = f'oferta-{i}.html'
+    filename = f'offer-{i}.html'
 
     html = create_html(offer_data, offer_name)
 
