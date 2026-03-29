@@ -12,6 +12,13 @@ OFFERS_PER_PAGE = 24
 REDIRECT_PAGES = 1
 
 
+def extract_filename_from_url(url):
+    match = re.search(r'/oferta/(.+)$', url)
+    if match:
+        return f"{match.group(1)}.html"
+    return None
+
+
 def extract_json_from_html(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -61,8 +68,17 @@ except FileNotFoundError:
 
 all_offers = listing_source['@graph'][1]['offers']['offers']
 
+offer_filenames = {}
+
 for i, offer in enumerate(all_offers, 1):
-    offer['url'] = f"{BASE_URL}/offer-{i}.html"
+    original_url = offer.get('url', '')
+    filename = extract_filename_from_url(original_url)
+
+    if not filename:
+        filename = f"oferta-{i}.html"
+
+    offer_filenames[i] = filename
+    offer['url'] = f"{BASE_URL}/{filename}"
 
 total_pages = (len(all_offers) + OFFERS_PER_PAGE - 1) // OFFERS_PER_PAGE
 
@@ -103,12 +119,13 @@ for page_num in range(total_pages + 1, total_pages + REDIRECT_PAGES + 1):
         f.write(html)
 
 for i, offer in enumerate(all_offers, 1):
+    filename = offer_filenames[i]
+
     offer_data = json.loads(json.dumps(listing_source))
     offer_data['@graph'][1]['offers']['offers'] = [offer]
-    offer_data['@graph'][0]['url'] = f"{BASE_URL}/offer-{i}.html"
+    offer_data['@graph'][0]['url'] = f"{BASE_URL}/{filename}"
 
-    offer_name = offer.get('name', f'Oferta {i}')
-    filename = f'offer-{i}.html'
+    offer_name = offer.get('name', f'offer {i}')
 
     html = create_html(offer_data, offer_name)
 
