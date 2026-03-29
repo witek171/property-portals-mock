@@ -31,15 +31,15 @@ http://localhost:8000/otodom/listing-page-2.html ...
 
 Offer URL:
 
-http://localhost:8000/otodom/oferta-1.html
-
-http://localhost:8000/otodom/oferta-2.html ...
+http://localhost:8000/otodom/mieszkanie-2-pokojowe-bemowo-wszedzie-blisko-ID4AhfS.html
 
 ---
 
 ## Portale
 ### Otodom:
 **Dane:** JSON-LD w <script type="application/ld+json">
+
+**External ID:** Wyciągane z URL oferty (np. `...mieszkanie-3-pok-ID4AIgX` → `ID4AIgX`)
 
 **Wykrywanie usuniętych ofert:** Usunięta → nie zawiera <script type="application/ld+json">
 
