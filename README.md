@@ -37,7 +37,7 @@ http://localhost:8000/otodom/mieszkanie-2-pokojowe-bemowo-wszedzie-blisko-ID4Ahf
 
 ## Portale
 ### Otodom:
-**Dane:** JSON-LD w <script type="application/ld+json">
+**Dane (pierwsza strona i szczegóły ofert):** JSON-LD w <script type="application/ld+json">
 
 **External ID:** Wyciągane z URL oferty (np. `...mieszkanie-3-pok-ID4AIgX` → `ID4AIgX`)
 
